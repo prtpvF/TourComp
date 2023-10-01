@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <title>Турфирма "Путешествие"</title>
+</head>
+<body>
+<div th:replace="header :: header"></div>
+
+<div class="container">
+  <div class="step">
+    <img src="/image/step1.jpg" alt="Шаг 1">
+    <h2>Шаг 1: Выберите направление</h2>
+    <p>Перед тем как начать оформление поездки, выберите желаемое направление. Мы предлагаем множество увлекательных мест для путешествий.</p>
+  </div>
+
+  <div class="step">
+    <img src="/image/step2.jpg" alt="Шаг 2">
+    <h2>Шаг 2: Забронируйте тур</h2>
+    <p>После выбора направления, перейдите на страницу с подробной информацией о туре и нажмите кнопку "Забронировать".</p>
+  </div>
+
+  <div class="step">
+    <img src="/image/step3.jpg" alt="Шаг 3">
+    <h2>Шаг 3: Ожидайте ответа оператора</h2>
+    <p>После бронирования тура, с вами свяжется наш тур оператор для обсуждения всех деталей.</p>
+  </div>
+
+  <div class="step">
+    <img src="/image/step4.jpg" alt="Шаг 4">
+    <h2>Шаг 4: Оплатите тур</h2>
+    <p>После успешного оформления, вам останется только оплатить тур.</p>
+  </div>
+
+  <div class="step">
+    <img src="/image/step5.jpg" alt="Шаг 5">
+    <h2>Шаг 5: Получение и изготовление документов</h2>
+    <p>После оплаты тура, вам останется только подготовить документы которые туроператор вышлет вам на почту</p>
+  </div>
+  <div class="step">
+    <img src="/image/step6.jpg" alt="Шаг 5">
+    <h2>Шаг 5: Готовьтесь к поездке</h2>
+    <p>Соберите вещи, проверьте документы и готовьтесь к увлекательному путешествию! Наша команда поможет вам во всем.</p>
+  </div>
+</div>
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

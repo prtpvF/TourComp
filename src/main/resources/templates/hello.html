@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Турфирма "Путешествие"</title>
+</head>
+<body>
+<div th:replace="header :: header"></div>
+
+<main>
+
+    <section id="search">
+        <h2>Поиск туров</h2>
+        <form>
+            <label for="destination">Место назначения:</label>
+            <input type="text" id="destination" name="destination" required>
+            <button type="submit" style="border:solid; border-radius:10px; border-color:  #154484; background-color: transparent; color:  #154484">Искать</button>
+        </form>
+    </section>
+    <div class="container">
+        <h1>Популярные туры</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="/image/tour1.jpg" alt="Тур 1" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Тур в Париж</h5>
+                        <p class="card-text">Отправление: 15 сентября 2023</p>
+                        <p class="card-text">Цена: $1000</p>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <small class="text-body-secondary">Горячее предложение!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="/image/tour2.jpg" alt="Тур 2" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Тур в Рим</h5>
+                        <p class="card-text">Отправление: 20 сентября 2023</p>
+                        <p class="card-text">Цена: $1200</p>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <small class="text-body-secondary">Горячее предложение!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <img src="/image/tour3.jpg" alt="Тур 3" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title">Тур в Лондон</h5>
+                        <p class="card-text">Отправление: 25 сентября 2023</p>
+                        <p class="card-text">Цена: $1100</p>
+                        <div class="d-flex justify-content-between align-items-center">
+
+                            <small class="text-body-secondary">Горячее предложение!</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a th:href="@{/tour/all}" class="all-product-page">Все товары</a>
+        </div>
+
+    </div>
+
+
+</main>
+
+<div th:replace="footer :: footer"></div>
+</body>
+</html>

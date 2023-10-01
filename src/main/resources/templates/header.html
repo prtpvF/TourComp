@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+  <h1 class = "logo-text">Road To The Dream</h1>
+
+  <nav>
+    <ul>
+      <li><a th:href="@{/}" class="link-header">Главная</a></li>
+      <li><a th:href="@{/about}" class="link-header">О нас</a></li>
+      <li><a th:href="@{/login}" class="link-header">Вход</a></li>
+      <li><a th:href="@{/registration}" class="link-header">Регистрация</a></li>
+      <li><a th:href="@{/offer}" class="link-header">Оформление</a></li>
+    </ul>
+  </nav>
+  <img src="/image/logo.png" class="logo-image" style="width: 70px; height: 70px;">
+</header>
+</body>
+</html>
