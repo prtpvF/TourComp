@@ -71,3 +71,14 @@ window.onclick = function(event) {
         }, 500);
     }
 }
+var loginSuccess = [[${loginSuccess}]];
+if (loginSuccess) {
+    // Отображаем оверлей
+    var overlay = document.getElementById('overlay');
+    overlay.style.display = 'block';
+
+    // Устанавливаем таймер на скрытие оверлея через 2 секунды
+    setTimeout(function () {
+        overlay.style.display = 'none';
+    }, 2000);
+}

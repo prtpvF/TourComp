@@ -17,7 +17,9 @@
   <div class="row">
     <div th:each="tour:${tours}" class="col-md-4 mb-4 d-flex">
       <div class="card">
-        <img th:src="@{/images/{id}(id=${1})}" class="card-img-top" />
+        <div th:each="img:${images}">
+          <img th:src="@{/images/{id}(id=${img.getId()})}" height="60px" />
+        </div>
         <div class="card-body">
           <h5 class="card-title"><a th:text="${tour.getCountry()}"></a></h5>
           <p class="card-text"><a th:text="${tour.getDescription()}"></a></p>

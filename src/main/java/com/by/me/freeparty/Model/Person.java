@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "Person")
+
 public class Person {
     @Id
     @Column(name = "id")
@@ -27,6 +28,16 @@ public class Person {
     private String password;
     @Column(name = "role")
     private String  role;
+    @Column(name = "gender")
+    private String gender;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @JoinTable(
+            name = "person_tour",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "tour_id")
+    )
+    private List<Tour> tours = new ArrayList<>();
 
     public String getRole() {
         return role;
@@ -68,14 +79,32 @@ public class Person {
         this.password = password;
     }
 
-    public Person(int id, String username, String email, String password, String role) {
+    public Person(int id, String username, String email, String password, String role, String gender, List<Tour> tours) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.role=role;
+        this.role = role;
+        this.gender = gender;
+        this.tours = tours;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public Person() {
+    }
+
+    public List<Tour> getTours() {
+        return tours;
+    }
+
+    public void setTours(List<Tour> tours) {
+        this.tours = tours;
     }
 }

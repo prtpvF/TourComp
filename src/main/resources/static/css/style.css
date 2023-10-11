@@ -257,3 +257,84 @@ footer {
     height: 300px;
     margin-left: 30%;
 }
+.tour-image {
+
+    height: 200px;
+}
+.exite-button{
+    font-family: Arial, sans-serif;
+    transition: color 0.3s;
+    background: none;
+    border: none;
+    padding: 0;
+    color: white;
+    text-decoration: none; /* Убираем подчеркивание */
+    cursor: pointer;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.message-box {
+    background: #fff;
+    padding: 20px;
+    text-align: center;
+    border-radius: 5px;
+}
+
+.icon-profile {
+    margin-right: 5px; /* Добавьте отступ справа, чтобы разделить иконку и текст */
+}
+
+.container-all {
+    margin-left: 25%;
+    display: flex;
+    height: 100vh; /* Сделать контейнер высотой по высоте экрана */
+    background-color: #f0f0f0; /* Сероватый фон */
+    border: 1px solid #ddd; /* Граница для трехмерного эффекта */
+    border-radius: 10px; /* Закругление углов */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Тень для 3D-эффекта */
+    padding: 20px; /* Отступы внутри контейнера */
+    max-width: 600px; /* Максимальная ширина контейнера */
+    flex-wrap: wrap; /* Перенос элементов на следующую строку при нехватке места */
+    justify-content: space-between;
+}
+.tour {
+    width: calc(33.33% - 10px); /* 33.33% ширины с отступом между элементами */
+    margin-bottom: 20px; /* Отступ между строками */
+    padding: 10px; /* Внутренний отступ для блока тура */
+    border: 1px solid #ddd; /* Граница для разграничения элементов */
+    border-radius: 5px; /* Закругление углов */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Тень для 3D-эффекта */
+}
+
+/* Стиль для страны */
+.tour-country {
+    text-decoration: none;
+    color: #333; /* Цвет текста */
+    font-weight: bold; /* Жирный шрифт */
+    margin: 10px 0; /* Верхний и нижний отступы для элементов */
+}
+
+/* Стиль для описания */
+.tour-description {
+    text-decoration: none;
+    color: #666; /* Цвет текста */
+    margin: 10px 0; /* Верхний и нижний отступы для элементов */
+}
+
+/* Стиль для стоимости */
+.tour-cost {
+    text-decoration: none;
+    color: #f00; /* Красный цвет текста */
+    font-weight: bold; /* Жирный шрифт */
+    margin: 10px 0; /* Верхний и нижний отступы для элементов */
+}

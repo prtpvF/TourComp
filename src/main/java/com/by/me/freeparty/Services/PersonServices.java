@@ -1,6 +1,7 @@
 package com.by.me.freeparty.Services;
 
 import com.by.me.freeparty.Model.Person;
+import com.by.me.freeparty.Model.Tour;
 import com.by.me.freeparty.Repositorys.PersonRep;
 import com.by.me.freeparty.Security.PersonDetails;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -25,8 +27,7 @@ public class PersonServices implements UserDetailsService {
         if(personRep.findById(person.getId())==null){
             throw new RuntimeException();
         } else
-            System.out.println("толмвалопмлаврмша");
-        person.setRole("ROLE_ADMIN");
+        person.setRole("ROLE_USER");
         person.setPassword(bCryptPasswordEncoder.encode(person.getPassword()));
             personRep.save(person);
     }
@@ -35,6 +36,9 @@ public class PersonServices implements UserDetailsService {
         PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         Person guest = personDetails.getPerson();
         return guest;
+    }
+    public Person getOne(){
+        return getAuth();
     }
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -47,6 +51,19 @@ public class PersonServices implements UserDetailsService {
         }
         System.out.println("не пустой");
         return new PersonDetails(person.get());
+    }
+
+    public List<Tour> getAllTours(int id){
+        Person person = personRep.findById(id).orElseThrow(()-> new RuntimeException("Такого пользвоателя не найденно"));
+        if(person.getTours().isEmpty()){
+            throw new RuntimeException("список пуст");
+        }
+        return  person.getTours();
+    }
+
+    public Person getPerson(int id){
+       Person person = personRep.findById(id).orElseThrow(()-> new RuntimeException("такого пользователя нет"));
+        return person;
     }
 
 }

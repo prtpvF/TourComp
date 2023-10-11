@@ -22,9 +22,9 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
                 http.authorizeHttpRequests(requests->requests
-                        .requestMatchers("/auth/login","/auth/registration","/error","/css/*", "/org/login", "/about", "/", "/tour/all", "/offer", "/all", "/tour/**", "/image/**", "/js/**, /tour/info/**").permitAll()
+                        .requestMatchers("/auth/login","/auth/registration","/error","/css/*", "/org/login", "/about", "/", "/tour/all", "/offer", "/all",  "/image/**", "/js/**, /tour/info/**").permitAll()
                         .anyRequest().authenticated()
-                ).formLogin(form->form.loginPage("/auth/login").loginProcessingUrl("/process_login").failureForwardUrl("/auth/login?error").defaultSuccessUrl("/auth/hello", true).permitAll()
+                ).formLogin(form->form.loginPage("/auth/login").loginProcessingUrl("/process_login").failureForwardUrl("/auth/login?error").defaultSuccessUrl("/person/home", true).permitAll()
 
                 ).logout(logout->logout.logoutUrl("/logout").logoutSuccessUrl("/auth/login"));
 

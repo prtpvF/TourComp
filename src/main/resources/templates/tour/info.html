@@ -15,23 +15,22 @@
   <div class="row justify-content-center" style="margin-top: 3%; margin-bottom: 3%">
     <div class="col-md-4 mb-4 d" style="width: 40%; margin-left: 15%">
       <div class="card">
-        <img th:src="@{/images/{id}(id=${1})}" class="card-img-top" />
+        <img th:src="@{/images/{id}(id=${tour.getPreviewImageId()})}" class="card-img-top" />
         <div class="card-body">
           <h5 class="card-title"><a th:text="${tour.getCountry()}"></a></h5>
           <p class="card-text"><a th:text="${tour.getDescription()}"></a></p>
           <p class="card-text">Цена: <a th:text="${tour.getCost()}"></a></p>
-          <div id="myModal" class="modal">
-            <div class="modal-content">
-              <span class="close">&times;</span>
-              <p>Спасибо за отправку заявки, с вами скоро свяжется наш менеджер</p>
-            </div>
-          </div>
-          <a href="#" class="btn btn-primary" style="background-color: #154484; font-size: 10px; margin-left: 2%" id="openModal">Записаться на консультацию</a>
+
+          <form method="post" th:action="@{/tour/add/person/{id2}/to/tour/{id}(id2=${person.getId()}, id=${tour.getId()})}">
+            <input type="hidden" name="_method" value="post" />
+            <button type="submit" class="btn " th:if="${userrole == 'ROLE_USER'}" >Забронировать</button>
+          </form>
+
+
+
 
           <form th:action="@{/tour/delete/{id}(id=${tour.getId()})}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
-
-
             <button type="submit" class="btn" th:if="${userrole == 'ROLE_ADMIN'}">Удалить</button>
           </form>
         </div>

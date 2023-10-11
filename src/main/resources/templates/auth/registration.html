@@ -22,6 +22,12 @@
       <label for="email">Email:</label>
       <input type="email" th:field="*{email}" id="email" >
 
+        <label for="gender">Пол:</label>
+        <select id="gender" name="gender" th:field="*{gender}">
+          <option value="male">Мужской</option>
+          <option value="female">Женский</option>
+        </select>
+
       <label for="password">Пароль:</label>
       <input type="password" th:field="*{password}" id="password" >
       <button class="register-button" type="submit" style="background-color: #154484">Зарегистрироваться</button>

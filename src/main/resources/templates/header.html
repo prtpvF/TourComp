@@ -13,11 +13,28 @@
     <ul>
       <li><a th:href="@{/}" class="link-header">Главная</a></li>
       <li><a th:href="@{/about}" class="link-header">О нас</a></li>
-      <li><a th:href="@{/login}" class="link-header">Вход</a></li>
-      <li><a th:href="@{/registration}" class="link-header">Регистрация</a></li>
+      <li><a th:href="@{/auth/login}" class="link-header">Вход</a></li>
+      <li><a th:href="@{/auth/registration}" class="link-header">Регистрация</a></li>
       <li><a th:href="@{/offer}" class="link-header">Оформление</a></li>
     </ul>
   </nav>
+
+  <div th:if="${userRole == 'ROLE_USER'}">
+    <form th:action="@{/logout}" method="post" style="display: inline;"class="logout-form">
+      <button type="submit"  class="exite-button">Выйти</button>
+    </form>
+
+    <a th:href="@{/person/home}" class="link-header">
+      <img src="/image/home_page.png" class="icon-profile" style="width: 24px; height: 24px;">
+      Личный кабинет
+    </a>
+  </div>
+
+  <div th:if="${userRole == 'ROLE_ADMIN'}">
+    <form th:action="@{/logout}" method="post" style="display: inline;"class="logout-form">
+      <button type="submit"  class="exite-button">Выйти</button>
+    </form>
+  </div>
   <img src="/image/logo.png" class="logo-image" style="width: 70px; height: 70px;">
 </header>
 </body>
