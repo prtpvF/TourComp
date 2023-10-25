@@ -51,5 +51,11 @@ public class PersonController {
         return "person/home";
     }
 
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable("id") int id){
+        personServices.deleteAccount(id);
+        return "redirect:/auth/login";
+    }
+
 
 }

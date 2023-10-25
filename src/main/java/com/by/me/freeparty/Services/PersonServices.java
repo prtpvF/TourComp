@@ -67,4 +67,10 @@ public class PersonServices implements UserDetailsService {
         return person;
     }
 
+    public void deleteAccount(int id){
+        Person person = personRep.findById(id).orElseThrow(()
+                ->new RuntimeException("Пользователь не найден"));
+        personRep.delete(person);
+    }
+
 }

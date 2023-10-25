@@ -10,6 +10,10 @@
 <div th:replace="header :: header"></div>
 <div class="container">
    <h3>Здравствуйте,</h3> <h3 th:text="${person.getUsername()}">Value</h3>
+    <form th:action="@{/person/{id}/delete(id=${person.getId()})}" method="post">
+        <input type="hidden" name="_method" value="DELETE" />
+        <button type="submit" class="btn">Удалить</button>
+    </form>
     <div th:if="${person.getTours().isEmpty()}">
         <h3>Увас пока нет забронированных туров!</h3>
     </div>
