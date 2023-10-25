@@ -12,15 +12,18 @@
 <div th:replace="header :: header"></div>
 <main id="registration">
   <section>
-    <h2>Заполните форму для регистрации сука</h2>
+    <h2>Заполните форму для регистрации</h2>
 
     <div class="sig-in-container" style="margin-bottom: 10%; margin-top:10%">
       <form method="POST" th:action="@{/auth/registration}" th:object="${person}"> <!-- Указываем action и method -->
-      <label for="username">Имя пользователя:</label>
-      <input type="text"  th:field="*{username}" id ="username">
+        <label for="username">Имя пользователя:</label>
+        <input type="text" th:field="*{username}" id="username">
+        <span th:if="${#fields.hasErrors('username')}" th:errors="*{username}" style="color: red"></span>
 
-      <label for="email">Email:</label>
-      <input type="email" th:field="*{email}" id="email" >
+        <label for="email">Email:</label>
+        <input type="email" th:field="*{email}" id="email" >
+        <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red"></span>
+
 
         <label for="gender">Пол:</label>
         <select id="gender" name="gender" th:field="*{gender}">
@@ -28,10 +31,11 @@
           <option value="female">Женский</option>
         </select>
 
-      <label for="password">Пароль:</label>
-      <input type="password" th:field="*{password}" id="password" >
-      <button class="register-button" type="submit" style="background-color: #154484">Зарегистрироваться</button>
-      <a th:href="@{/auth/login}"  style=" color: black; text-decoration: none; margin-left: 2%">Войти</a>
+        <label for="password">Пароль:</label>
+        <input type="password" th:field="*{password}" id="password" >
+        <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red"></span>
+        <button class="register-button" type="submit" style="background-color: #154484">Зарегистрироваться</button>
+        <a th:href="@{/auth/login}"  style=" color: black; text-decoration: none; margin-left: 2%">Войти</a>
 
     </form></div>
   </section>

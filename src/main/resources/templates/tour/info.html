@@ -20,6 +20,7 @@
           <h5 class="card-title"><a th:text="${tour.getCountry()}"></a></h5>
           <p class="card-text"><a th:text="${tour.getDescription()}"></a></p>
           <p class="card-text">Цена: <a th:text="${tour.getCost()}"></a></p>
+          <p class="card-text">Дата: <a th:text="${tour.getDate()}"></a></p>
 
           <form method="post" th:action="@{/tour/add/person/{id2}/to/tour/{id}(id2=${person.getId()}, id=${tour.getId()})}">
             <input type="hidden" name="_method" value="post" />

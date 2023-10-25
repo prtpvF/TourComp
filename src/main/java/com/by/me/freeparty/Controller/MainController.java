@@ -29,6 +29,7 @@ public class MainController {
         return "offer";
     }
 
+
     @RequestMapping("/header")
     public String header(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

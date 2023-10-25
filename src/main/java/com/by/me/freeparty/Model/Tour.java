@@ -1,15 +1,21 @@
 package com.by.me.freeparty.Model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CollectionIdJdbcTypeCode;
+import org.hibernate.validator.constraints.Length;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Timer;
 
-
+@Cacheable(false)
 @Entity
 @Table(name = "tour")
 public class Tour {
@@ -19,22 +25,31 @@ public class Tour {
     private int id;
 
     @Column(name = "description")
+    @NotEmpty(message = "заполните поле")
+    @Length(min = 10, message = "введите нормально")
     private String description;
+
     @Column(name = "cost")
+    @NotEmpty(message = "заполните поле")
+    @Length(min = 1, max = 100, message = "неверно введенная цена")
     private String cost;
     @Column(name = "country")
+    @NotEmpty(message = "заполните поле")
     private String country;
 
     private Long previewImageId;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER,
-            mappedBy = "tour")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "tour")
     private List<Image> images = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "tours", fetch = FetchType.EAGER,  cascade = CascadeType.REMOVE)
+    @ManyToMany(mappedBy = "tours", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<Person> persons = new ArrayList<>();
+    @Column(name = "date")
 
-    public void addImageToProduct(Image image){ // добавление картинки
+    private LocalDateTime date;
+
+
+    public void addImageToProduct(Image image) { // добавление картинки
         image.setTour(this);
         images.add(image);
     }
@@ -95,10 +110,20 @@ public class Tour {
         this.persons = persons;
     }
 
+    public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime date) {
+        this.date = date;
+    }
+
+
+
     public Tour() {
     }
 
-    public Tour(int id, String description, String cost, String country, Long previewImageId, List<Image> images, List<Person> persons) {
+    public Tour(int id, String description, String cost, String country, Long previewImageId, List<Image> images, List<Person> persons, LocalDateTime date) {
         this.id = id;
         this.description = description;
         this.cost = cost;
@@ -106,6 +131,8 @@ public class Tour {
         this.previewImageId = previewImageId;
         this.images = images;
         this.persons = persons;
+        this.date = date;
+
     }
 }
 

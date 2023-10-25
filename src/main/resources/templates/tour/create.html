@@ -11,10 +11,21 @@
 <div th:replace="header :: header"></div>
 <h3>Создать новый тур</h3>
 <div class="create-container">
-    <form th:action="@{/tour/create}" method="post" enctype="multipart/form-data">
-        Страна прибытия: <input type="text" name="country"/><br><br>
-        Описание тура: <input type="text" name="description"/><br><br>
-        Цена: <input type="number" name="cost"/><br><br>
+    <form th:action="@{/tour/create}" method="post" enctype="multipart/form-data" th:object="${tour}">
+        <label for="country">Страна:</label>
+        <input type="text" th:field="*{country}" id="country" >
+        <span th:if="${#fields.hasErrors('country')}" th:errors="*{country}" style="color: red"></span>
+
+
+
+        <label for="description">Описание:</label>
+        <input type="text" th:field="*{description}" id="description" >
+        <span th:if="${#fields.hasErrors('description')}" th:errors="*{description}" style="color: red"></span>
+        <label for="cost">Цена:</label>
+        <input type="number" th:field="*{cost}" id="cost" >
+        <span th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}" style="color: red"></span>
+        Дата: <input type="datetime-local" name="date"/><br><br>
+        <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" style="color: red"></span>
         фотография: <input type="file" name="file1"/><br><br>
         <input type="submit" value="Добавить тур"/>
     </form>

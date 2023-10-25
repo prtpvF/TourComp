@@ -13,19 +13,25 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PreRemove;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -34,10 +40,12 @@ import java.util.List;
 public class TourServices {
     private final TourRep tourRep;
     private final PersonRep personRep;
+    private final EntityManager entityManager;
     @Autowired
     private EmailSenderServices emailSenderServices;
+
     public static void addImg(Tour tour, MultipartFile file, Image image) throws IOException {
-        if(file.getSize()!=0){
+        if (file.getSize() != 0) {
             image = toImageEntity(file);
             tour.addImageToProduct(image);
         }
@@ -55,35 +63,54 @@ public class TourServices {
 
         Tour tourFromDb = tourRep.save(tour);
         tourFromDb.setPreviewImageId(tourFromDb.getImages().get(0).getId());
-            tourRep.save(tour);
+
+        tourRep.save(tour);
+    }
+    public static String getGender(Person person){
+        String gender;
+        if (person.getGender() == "male") {
+            return "Уважаемый";
+        } else return  "Уважаемая";
+    }
+
+    public static String sendGiftEmailToThePerson(Person person, Tour tour){
+        String body = getGender(person) + " " + person.getUsername() + " вы бронировали тур в " + tour.getCountry() + "\n" + "К сожалению тур был отменен, приносим свои извинения " + "\n" +
+                " в качестве извинений, предлагаем воспользоваться нашим промокдом на 50% скидку! Для получения промокода, свяжитесь с нашим менеджером "+"\n"
+                + "С уважение Road To The Dream";
+        return body;
+    }
+    public static boolean checkDayBeforeStart(Tour tour){
+        LocalDateTime today = LocalDateTime.now();
+        LocalDateTime dayOfStartTour = tour.getDate();
+        if(today.getDayOfMonth()== dayOfStartTour.getDayOfMonth())
+            return true;
+        else
+        return false;
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public void delete(int id){
-        Tour tour = tourRep.findById(id).orElseThrow(()-> new RuntimeException("тур не найден"));
-        if(tour.getPersons().isEmpty())
-            tourRep.deleteById(id);
-        else{
+    public void delete(int id) {
+        Tour tour = tourRep.findById(id).orElseThrow(() -> new RuntimeException("тур не найден"));
+        if(checkDayBeforeStart(tour)) {
             List<Person> persons = tour.getPersons();
-            for (Person person:
-                 persons) {
-                String gender;
+            for (Person person : persons) {
                 person.getTours().remove(tour);
-                if(person.getGender()=="male"){
-                    gender = "Уважаемый";
-                } else gender="Уважаемая";
-                emailSenderServices.sendEmail(person.getEmail(), "бронь отменена", gender + " к сожалению ваш рейс был отменен "
-                +"\n" + " приносим свои извинения "
-                +"\n" + " с наилучшими пожаления Road To The Dream");
+               emailSenderServices.sendEmail(person.getEmail(), "отмена брони",sendGiftEmailToThePerson(person,tour));
+            }
+        }
+            List<Person> persons = tour.getPersons();
+            for (Person person : persons) {
+                person.getTours().remove(tour);
+                emailSenderServices.sendEmail(person.getEmail(), "бронь отменена", getGender(person) + " к сожалению ваш рейс был отменен " + "\n" + " приносим свои извинения " + "\n" + " с наилучшими пожаления Road To The Dream");
             }
             tour.getPersons().clear();
 
-            // Удаляем сам тур
+
             tourRep.deleteById(id);
-        }
+
     }
 
-    public List<Tour> findAll(){
+    public List<Tour> findAll() {
         return tourRep.findAll();
     }
 
@@ -97,58 +124,44 @@ public class TourServices {
         image.setBytes(file1.getBytes());
         return image;
     }
-    public Person getAuth(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails)authentication.getPrincipal();
-        Person person = personDetails.getPerson();
-        return person;
-    }
 
-    public static String sendMessageToPerson(Person person, Tour tour)  {
-        String gender;
-        if(person.getGender()=="male"){
-            gender = "Уважаемый";
-        } else gender="Уважаемая";
-        String body = gender + " " + person.getUsername() + " вы забронировали тур в " + tour.getCountry() +"\n" + "Благодарим вас за то что выбрали нас " + "\n"+
-                "\n" + "С уважение Road To The Dream";
+
+
+    public static String sendMessageToPerson(Person person, Tour tour) {
+
+        String body = getGender(person) + " " + person.getUsername() + " вы забронировали тур в " + tour.getCountry() + "\n" + "Благодарим вас за то что выбрали нас " + "\n" + "\n" + "С уважение Road To The Dream";
         String message = body;
         return message;
     }
 
-    public static String sendRemoveTourMessageToPerson(Person person, Tour tour)  {
-        String gender;
-        if(person.getGender()=="male"){
-            gender = "Уважаемый";
-        } else gender="Уважаемая";
-        String body = gender + " " + person.getUsername() + " вы отменили бронирование тура в  " + tour.getCountry() +"\n"  + "\n"+
-                "\n" + "С уважение Road To The Dream";
+    public static String sendRemoveTourMessageToPerson(Person person, Tour tour) {
+        String body = getGender(person) + " " + person.getUsername() + " вы отменили бронирование тура в  " + tour.getCountry() + "\n" + "\n" + "\n" + "С уважение Road To The Dream";
         String message = body;
         return message;
     }
 
-    public static String sendMessageToCompany(Person person, Tour tour){
-        String body = "Пользователь " + person.getEmail() + " забронировал тур в " + tour.getCountry() + " id тура " + tour.getId()
-                +"\n" + " вам необходимо связаться с ним!";
+    public static String sendMessageToCompany(Person person, Tour tour) {
+        String body = "Пользователь " + person.getEmail() + " забронировал тур в " + tour.getCountry() + " id тура " + tour.getId() + "\n" + " вам необходимо связаться с ним!";
         return body;
 
     }
 
-    public Tour getOne(int id){
+    public Tour getOne(int id) {
         return tourRep.findById(id).orElse(null);
     }
 
     @Transactional
-    public void addTourToUser(int id){
+    public void addTourToUser(int id) {
         Tour tour = tourRep.findById(id).orElseThrow(() -> new RuntimeException("Такого тура нет"));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails)authentication.getPrincipal();
+        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
         Person person = personDetails.getPerson();
         List<Tour> tours = person.getTours();
         tours.add(tour);
         List<Person> persons = tour.getPersons();
-            persons.add(person);
-            tour.setPersons(persons);
-            person.setTours(tours);
+        persons.add(person);
+        tour.setPersons(persons);
+        person.setTours(tours);
         tourRep.save(tour);
         personRep.save(person);
         emailSenderServices.sendEmail(person.getEmail(), "бронирование", sendMessageToPerson(person, tour));
@@ -158,30 +171,17 @@ public class TourServices {
     @Transactional
     public void deleteTourFromUser(int id, int id2) {
         Tour tour = tourRep.findById(id).orElseThrow(() -> new RuntimeException("Такого тура нет"));
-        Person person = personRep.findById(id2).orElseThrow(()-> new RuntimeException("Такого пользователя не найдено"));
-
-        // Удаляем тур из списка туров у пользователя
-        List<Tour> tours = person.getTours();
-        tours.remove(tour);
-        person.setTours(tours);
-
-        // Удаляем пользователя из списка пользователей у тура
-        List<Person> persons = tour.getPersons();
-        persons.remove(person);
-        tour.setPersons(persons);
-
-        // Обновляем объекты в сессии Hibernate, чтобы сохранить изменения
-        personRep.save(person);
-        tourRep.save(tour);
-        personRep.flush();
-        tourRep.flush();
-        // Отправляем сообщения
+        Person person = personRep.findById(id2).orElseThrow(() -> new RuntimeException("Такого пользователя не найдено"));
+        List<Tour> person_tours = person.getTours();
+        person_tours.remove(tour);
+        person.setTours(person_tours);
         emailSenderServices.sendEmail(person.getEmail(), "Отмена", sendRemoveTourMessageToPerson(person, tour));
-        emailSenderServices.sendEmail("caplyginmihail48@gmail.com", "бронирование", sendMessageToCompany(person, tour));
+        emailSenderServices.sendEmail("caplyginmihail48@gmail.com", "отмена", sendMessageToCompany(person, tour));
     }
-    public List<Person> getAllGuests(int id){
-        Tour tour = tourRep.findById(id).orElseThrow(()-> new RuntimeException("такого тура нет"));
-        if(tour.getPersons().isEmpty()){
+
+    public List<Person> getAllGuests(int id) {
+        Tour tour = tourRep.findById(id).orElseThrow(() -> new RuntimeException("такого тура нет"));
+        if (tour.getPersons().isEmpty()) {
             return null;
         }
         return tour.getPersons();

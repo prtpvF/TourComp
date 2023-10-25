@@ -7,6 +7,7 @@ import com.by.me.freeparty.Security.PersonDetails;
 import com.by.me.freeparty.Services.EmailSenderServices;
 import com.by.me.freeparty.Services.PersonServices;
 import com.by.me.freeparty.Services.TourServices;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
@@ -33,12 +34,16 @@ private EmailSenderServices emailSenderServices;
 
     @PostMapping("/create")
     public String createProduct(@RequestParam("file1") MultipartFile file1,
-                                 Tour tour) throws IOException {
+                                 @Valid Tour tour, BindingResult bindingResult) throws IOException {
+        if (bindingResult.hasErrors()){
+            return "/tour/create";
+        }
         tourServices.addTour(tour, file1);
         return "redirect:/tour/all";
     }
     @GetMapping("/create")
-    public String createPage(){
+    public String createPage(@ModelAttribute("tour") Tour tour){
+
         return "/tour/create";
     }
 

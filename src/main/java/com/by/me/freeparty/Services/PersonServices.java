@@ -58,7 +58,8 @@ public class PersonServices implements UserDetailsService {
         if(person.getTours().isEmpty()){
             throw new RuntimeException("список пуст");
         }
-        return  person.getTours();
+        List<Tour> tours = person.getTours();
+        return  tours;
     }
 
     public Person getPerson(int id){
